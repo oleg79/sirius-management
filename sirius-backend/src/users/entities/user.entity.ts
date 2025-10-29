@@ -32,6 +32,9 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ type: 'varchar', insert: false, update: false })
+  role: 'student' | 'teacher';
+
   @BeforeInsert()
   async hashPassword() {
     if (this.password) {
