@@ -35,11 +35,16 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      request['user'] = await this.jwtService.verifyAsync<{
+      const jwtData = await this.jwtService.verifyAsync<{
         sub: string;
         role: 'teacher' | 'student';
       }>(token, { secret: this.configService.getOrThrow('JWT_SECRET') });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      request['user'] = {
+        id: jwtData.sub,
+        role: jwtData.role,
+      };
     } catch {
       throw new UnauthorizedException();
     }

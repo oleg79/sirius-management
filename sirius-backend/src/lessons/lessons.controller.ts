@@ -9,6 +9,8 @@ import {
 } from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { type RequestUser } from '../auth/intefaces/request-user.interface';
 
 @Controller('lessons')
 export class LessonsController {
@@ -29,13 +31,8 @@ export class LessonsController {
     return this.lessonsService.accept(id);
   }
 
-  @Get('for-teacher/:id')
-  findAllForTeacher(@Param('id', new ParseUUIDPipe()) teacherId: string) {
-    return this.lessonsService.findAllBy({ teacherId });
-  }
-
-  @Get('for-student/:id')
-  findAllForStudent(@Param('id', new ParseUUIDPipe()) studentId: string) {
-    return this.lessonsService.findAllBy({ studentId });
+  @Get()
+  findAllForTeacher(@CurrentUser() user: RequestUser) {
+    return this.lessonsService.findAllBy(user.id, user.role);
   }
 }

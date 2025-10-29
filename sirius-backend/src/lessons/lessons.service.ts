@@ -28,7 +28,10 @@ export class LessonsService {
     return this.repository.save(lesson);
   }
 
-  findAllBy(params: { teacherId: string } | { studentId: string }) {
+  findAllBy(userId: string, role: 'teacher' | 'student') {
+    const params =
+      role === 'teacher' ? { teacherId: userId } : { studentId: userId };
+
     return this.repository.findBy(params);
   }
 }
