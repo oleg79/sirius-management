@@ -4,6 +4,7 @@ import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Repository } from 'typeorm';
 import { Teacher } from './entities/teacher.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Student } from '../students/entities/student.entity';
 
 @Injectable()
 export class TeachersService {
@@ -24,6 +25,14 @@ export class TeachersService {
 
   findOne(id: string) {
     return this.repository.findOneBy({ id });
+  }
+
+  findAllStudentsOf(id: string) {
+    return this.repository
+      .createQueryBuilder()
+      .relation(Teacher, 'students')
+      .of(id)
+      .loadMany<Student>();
   }
 
   async update(id: string, updateTeacherDto: UpdateTeacherDto) {

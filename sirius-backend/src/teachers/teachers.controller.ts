@@ -31,6 +31,11 @@ export class TeachersController {
     return this.teachersService.findOne(id);
   }
 
+  @Get(':id/students')
+  findAllStudentsOf(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.teachersService.findAllStudentsOf(id);
+  }
+
   @Patch(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
