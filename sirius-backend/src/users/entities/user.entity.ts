@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   Index,
   TableInheritance,
+  BeforeInsert,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @Index('users_name_idx', ['lastName', 'firstName'])
@@ -29,4 +31,11 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
 }
