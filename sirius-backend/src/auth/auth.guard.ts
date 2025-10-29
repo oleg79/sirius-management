@@ -1,0 +1,47 @@
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const request = context.switchToHttp().getRequest();
+    const token = this.extractTokenFromHeader(request);
+
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      request['user'] = await this.jwtService.verifyAsync<{
+        sub: string;
+        role: 'teacher' | 'student';
+      }>(token, { secret: this.configService.getOrThrow('JWT_SECRET') });
+    } catch {
+      throw new UnauthorizedException();
+    }
+    return true;
+  }
+
+  // TODO: implement jwt strategy with @nestjs/passport
+  private extractTokenFromHeader(request: Request): string | undefined {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const [type, token] =
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+      (request.headers as any).authorization?.split(' ') ?? [];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return type === 'Bearer' ? token : undefined;
+  }
+}
