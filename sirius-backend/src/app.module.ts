@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { TeachersModule } from './teachers/teachers.module';
 import { StudentsModule } from './students/students.module';
+import { LessonsModule } from './lessons/lessons.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { StudentsModule } from './students/students.module';
     DatabaseModule,
     TeachersModule,
     StudentsModule,
+    LessonsModule,
   ],
   controllers: [],
   providers: [],
