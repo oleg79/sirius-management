@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
-import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { Repository } from 'typeorm';
 import { Lesson, LessonStatus } from './entities/lesson.entity';
 import { InjectRepository } from '@nestjs/typeorm';
