@@ -7,6 +7,6 @@ export class Student extends User {
   @Column({ length: 100 })
   instrument: string;
 
-  @ManyToMany(() => Teacher, (t) => t.students)
+  @ManyToMany(() => Teacher, (t) => t.students, { onDelete: 'CASCADE' })
   teachers: Promise<Teacher[]>;
 }

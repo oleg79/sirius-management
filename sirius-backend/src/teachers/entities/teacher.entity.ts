@@ -10,7 +10,7 @@ export class Teacher extends User {
   @Column({ type: 'int' })
   experience: number;
 
-  @ManyToMany(() => Student, (s) => s.teachers)
+  @ManyToMany(() => Student, (s) => s.teachers, { onDelete: 'CASCADE' })
   @JoinTable({
     name: 'teachers_students',
     joinColumn: {
