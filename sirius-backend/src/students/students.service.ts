@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import { Repository } from 'typeorm';
 import { Student } from './entities/student.entity';
-import { InjectRepository } from '@nestjs/typeorm';
+import { AssignTeacherDto } from './dto/asssign-teacher.dto';
 
 @Injectable()
 export class StudentsService {
@@ -24,6 +25,14 @@ export class StudentsService {
 
   findOne(id: string) {
     return this.repository.findOneBy({ id });
+  }
+
+  assignTeacher(studentId: string, assignTeacherDto: AssignTeacherDto) {
+    return this.repository
+      .createQueryBuilder()
+      .relation(Student, 'teachers')
+      .of(studentId)
+      .add(assignTeacherDto.teacherId);
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {

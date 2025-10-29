@@ -11,6 +11,7 @@ import {
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { AssignTeacherDto } from './dto/asssign-teacher.dto';
 
 @Controller('students')
 export class StudentsController {
@@ -42,5 +43,13 @@ export class StudentsController {
   @Delete(':id')
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.studentsService.remove(id);
+  }
+
+  @Post(':id/assign-teacher')
+  assignTeacher(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() assignTeacherDto: AssignTeacherDto,
+  ) {
+    return this.studentsService.assignTeacher(id, assignTeacherDto);
   }
 }
