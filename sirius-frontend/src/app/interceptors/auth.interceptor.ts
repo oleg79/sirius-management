@@ -7,7 +7,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
 
   if (jwtToken) {
     const newReq = req.clone({
-      headers: req.headers.append('Authentication', `Bearer: ${jwtToken}`),
+      headers: req.headers.append('Authorization', `Bearer ${jwtToken}`),
     });
     return next(newReq);
   }
