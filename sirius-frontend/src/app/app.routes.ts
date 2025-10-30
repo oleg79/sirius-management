@@ -5,6 +5,7 @@ import {TeacherView} from './views/teacher-view/teacher-view';
 import {StudentView} from './views/student-view/student-view';
 import {rootRedirectGuard} from './guards/root-redirect-guard';
 import {loginGuard} from './guards/login-guard';
+import {EmptyView} from './views/empty-view/empty-view';
 
 export const routes: Routes = [
   {
@@ -20,11 +21,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: StudentView,
+        component: EmptyView,
       },
       {
         path: 'students',
-        component: StudentView,
+        component: EmptyView,
       },
     ]
   },
@@ -32,6 +33,17 @@ export const routes: Routes = [
     path: 'student',
     component: StudentView,
     canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'lessons', pathMatch: 'full' },
+      {
+        path: 'lessons',
+        component: EmptyView,
+      },
+      {
+        path: 'teachers',
+        component: EmptyView,
+      },
+    ]
   },
   {
     path: 'login',
