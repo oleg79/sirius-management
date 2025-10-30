@@ -1,6 +1,7 @@
-import { ChildEntity, Column, JoinTable, ManyToMany } from 'typeorm';
+import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Student } from '../../students/entities/student.entity';
+import { Lesson } from '../../lessons/entities/lesson.entity';
 
 @ChildEntity('teacher')
 export class Teacher extends User {
@@ -21,4 +22,7 @@ export class Teacher extends User {
     },
   })
   students: Promise<Student[]>;
+
+  @OneToMany(() => Lesson, (l) => l.teacher)
+  lessons: Lesson[];
 }
