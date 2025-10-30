@@ -9,6 +9,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly repository: Repository<User>,
   ) {}
+
   findOne(firstName: string, lastName: string) {
     return this.repository.findOne({
       where: { firstName, lastName },
