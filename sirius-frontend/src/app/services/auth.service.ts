@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import {Router} from '@angular/router';
@@ -27,11 +27,24 @@ export class AuthService {
 
     if (!token) return null;
 
-    return jwtDecode<{ sub: string; role: 'teacher' | 'student' }>(token);
+    return jwtDecode<{
+      sub: string;
+      role: 'teacher' | 'student';
+      firstName: string;
+      lastName: string
+    }>(token);
   }
 
   getUserRole() {
     return this.getUser()?.role;
+  }
+
+  getUserFullName() {
+    const user = this.getUser();
+
+    if (!user) return null;
+
+    return `${user.firstName} ${user.lastName}`;
   }
 
   isAuthenticated() {

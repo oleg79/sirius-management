@@ -16,6 +16,17 @@ export const routes: Routes = [
     path: 'teacher',
     component: TeacherView,
     canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'lessons', pathMatch: 'full' },
+      {
+        path: 'lessons',
+        component: StudentView,
+      },
+      {
+        path: 'students',
+        component: StudentView,
+      },
+    ]
   },
   {
     path: 'student',
