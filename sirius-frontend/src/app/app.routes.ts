@@ -6,14 +6,38 @@ import {StudentView} from './views/student-view/student-view';
 import {rootRedirectGuard} from './guards/root-redirect-guard';
 import {loginGuard} from './guards/login-guard';
 import {EmptyView} from './views/empty-view/empty-view';
-import {LessonsComponent} from './views/student-view/lessons-component/lessons-component';
-import {TeachersComponent} from './views/student-view/teachers-component/teachers-component';
+import {LessonsComponent as StudentLessonsComponent} from './views/student-view/lessons-component/lessons-component';
+import {TeachersComponent as StudentTeachersComponent} from './views/student-view/teachers-component/teachers-component';
+import {AdminView} from './views/admin-view/admin-view';
+import {LessonsComponent} from './views/admin-view/lessons-component/lessons-component';
+import {TeachersComponent} from './views/admin-view/teachers-component/teachers-component';
+import {StudentsComponent} from './views/admin-view/students-component/students-component';
 
 export const routes: Routes = [
   {
     path: '',
     canActivate: [rootRedirectGuard],
     children: []
+  },
+  {
+    path: 'admin',
+    component: AdminView,
+    canActivate: [authGuard],
+    children: [
+      { path: '', redirectTo: 'lessons', pathMatch: 'full' },
+      {
+        path: 'lessons',
+        component: LessonsComponent,
+      },
+      {
+        path: 'teachers',
+        component: TeachersComponent,
+      },
+      {
+        path: 'students',
+        component: StudentsComponent,
+      },
+    ]
   },
   {
     path: 'teacher',
@@ -39,11 +63,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: LessonsComponent,
+        component: StudentLessonsComponent,
       },
       {
         path: 'teachers',
-        component: TeachersComponent,
+        component: StudentTeachersComponent,
       },
     ]
   },

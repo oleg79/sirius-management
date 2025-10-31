@@ -17,6 +17,8 @@ export const loginGuard: CanActivateFn = (route, state) => {
       return router.createUrlTree(['/teacher']);
     case 'student':
       return router.createUrlTree(['/student']);
+    case 'admin':
+      return router.createUrlTree(['/admin']);
     default:
       throw new Error('UNKNOWN ROLE');
   }

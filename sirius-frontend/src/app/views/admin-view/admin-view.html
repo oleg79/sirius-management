@@ -1,0 +1,37 @@
+<nav class="w-full flex p-4 bg-indigo-100">
+  <div class="flex gap-4">
+    <a
+      class="p-2 bg-indigo-400 text-white rounded-md"
+      [routerLink]="['lessons']"
+      routerLinkActive="bg-indigo-600"
+    >
+      Lessons
+    </a>
+    <a
+      class="p-2 bg-indigo-400 text-white rounded-md"
+      [routerLink]="['teachers']"
+      routerLinkActive="bg-indigo-600"
+    >
+      Teachers
+    </a>
+    <a
+      class="p-2 bg-indigo-400 text-white rounded-md"
+      [routerLink]="['students']"
+      routerLinkActive="bg-indigo-600"
+    >
+      Students
+    </a>
+  </div>
+
+  <div class="ml-auto flex gap-4">
+    <span class="p-2">{{ authService.getUserFullName() }}</span>
+    <button
+      class="p-2 bg-indigo-400 text-white rounded-md cursor-pointer"
+      (click)="logout()"
+    >
+      log out
+    </button>
+  </div>
+</nav>
+
+<router-outlet />

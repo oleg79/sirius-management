@@ -17,6 +17,8 @@ export const rootRedirectGuard: CanActivateFn = (route, state) => {
       return router.createUrlTree(['/teacher']);
     case 'student':
       return router.createUrlTree(['/student']);
+    case 'admin':
+      return router.createUrlTree(['/admin']);
     default:
       return router.createUrlTree(['/login']);
   }

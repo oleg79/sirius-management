@@ -29,7 +29,7 @@ export class AuthService {
 
     return jwtDecode<{
       sub: string;
-      role: 'teacher' | 'student';
+      role: 'admin' | 'teacher' | 'student';
       firstName: string;
       lastName: string
     }>(token);
@@ -68,6 +68,9 @@ export class AuthService {
           break;
         case 'student':
           void this.router.navigate(['student']);
+          break;
+        case 'admin':
+          void this.router.navigate(['admin']);
           break;
         default:
           throw new Error('UNKNOWN ROLE');
