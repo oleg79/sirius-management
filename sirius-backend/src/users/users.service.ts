@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -10,10 +10,25 @@ export class UsersService {
     private readonly repository: Repository<User>,
   ) {}
 
-  findOne(firstName: string, lastName: string) {
-    return this.repository.findOne({
-      where: { firstName, lastName },
-      select: ['id', 'firstName', 'lastName', 'password', 'role'],
-    });
+  async findOne(firstName: string, lastName: string) {
+    const result = (await this.repository
+      .createQueryBuilder('u')
+      .where({ firstName, lastName })
+      .select('u.id', 'id')
+      .addSelect('u.role', 'role')
+      .addSelect('u.firstName', 'firstName')
+      .addSelect('u.lastName', 'lastName')
+      .addSelect('u.password', 'password')
+      .execute()) as [
+      {
+        id: string;
+        role: UserRole;
+        firstName: string;
+        lastName: string;
+        password: string;
+      },
+    ];
+
+    return result[0];
   }
 }

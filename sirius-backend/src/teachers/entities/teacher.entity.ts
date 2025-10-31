@@ -1,9 +1,9 @@
 import { ChildEntity, Column, JoinTable, ManyToMany, OneToMany } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User, UserRoles } from '../../users/entities/user.entity';
 import { Student } from '../../students/entities/student.entity';
 import { Lesson } from '../../lessons/entities/lesson.entity';
 
-@ChildEntity('teacher')
+@ChildEntity(UserRoles.teacher)
 export class Teacher extends User {
   @Column({ length: 100 })
   instrument: string;

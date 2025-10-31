@@ -10,6 +10,14 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
+export const UserRoles = {
+  admin: 'admin',
+  teacher: 'teacher',
+  student: 'student',
+} as const;
+
+export type UserRole = keyof typeof UserRoles;
+
 @Entity()
 @Index('users_name_idx', ['lastName', 'firstName'])
 @TableInheritance({ column: { type: 'varchar', name: 'role' } })
@@ -31,9 +39,6 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Column({ type: 'varchar', insert: false, update: false })
-  role: 'student' | 'teacher';
 
   @BeforeInsert()
   async hashPassword() {

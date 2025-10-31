@@ -3,6 +3,7 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { Repository } from 'typeorm';
 import { Lesson, LessonStatus } from './entities/lesson.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UserRole } from '../users/entities/user.entity';
 
 @Injectable()
 export class LessonsService {
@@ -28,7 +29,7 @@ export class LessonsService {
     return this.repository.save(lesson);
   }
 
-  findAllBy(userId: string, role: 'teacher' | 'student') {
+  findAllBy(userId: string, role: UserRole) {
     const where =
       role === 'teacher' ? { teacherId: userId } : { studentId: userId };
 

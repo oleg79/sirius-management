@@ -8,6 +8,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
+import { UserRole } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -37,7 +38,7 @@ export class AuthGuard implements CanActivate {
     try {
       const jwtData = await this.jwtService.verifyAsync<{
         sub: string;
-        role: 'teacher' | 'student';
+        role: UserRole;
       }>(token, { secret: this.configService.getOrThrow('JWT_SECRET') });
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
