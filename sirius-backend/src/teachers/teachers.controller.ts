@@ -19,12 +19,13 @@ import type { RequestUser } from '../auth/intefaces/request-user.interface';
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
+  @Roles(['admin'])
   @Post()
   create(@Body() createTeacherDto: CreateTeacherDto) {
     return this.teachersService.create(createTeacherDto);
   }
 
-  @Roles(['student'])
+  @Roles(['admin', 'student'])
   @Get()
   findAll(@CurrentUser() user: RequestUser) {
     return this.teachersService.findAll(user);
@@ -40,6 +41,7 @@ export class TeachersController {
     return this.teachersService.findAllStudentsOf(id);
   }
 
+  @Roles(['admin'])
   @Patch(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -48,6 +50,7 @@ export class TeachersController {
     return this.teachersService.update(id, updateTeacherDto);
   }
 
+  @Roles(['admin'])
   @Delete(':id')
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.teachersService.remove(id);
