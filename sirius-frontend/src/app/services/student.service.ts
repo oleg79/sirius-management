@@ -9,6 +9,11 @@ export type CreateStudentDto = {
   instrument: string;
 };
 
+export type AssignTeacherDto = {
+  teacherId: string;
+  assign: boolean;
+}
+
 export type Student = {
   id: string;
   firstName: string;
@@ -39,5 +44,13 @@ export class StudentService {
 
   delete(id: string) {
     return firstValueFrom(this.delete$(id));
+  }
+
+  private assign$(id: string, assignTeacherDto: AssignTeacherDto) {
+    return this.http.post(`students/${id}/assign-teacher`, assignTeacherDto);
+  }
+
+  assign(id: string, assignTeacherDto: AssignTeacherDto) {
+    return firstValueFrom(this.assign$(id, assignTeacherDto));
   }
 }

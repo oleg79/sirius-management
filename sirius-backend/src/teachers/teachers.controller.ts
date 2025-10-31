@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
@@ -27,8 +28,11 @@ export class TeachersController {
 
   @Roles(['admin', 'student'])
   @Get()
-  findAll(@CurrentUser() user: RequestUser) {
-    return this.teachersService.findAll(user);
+  findAll(
+    @CurrentUser() user: RequestUser,
+    @Query('instrument') instrument?: string,
+  ) {
+    return this.teachersService.findAll(user, instrument);
   }
 
   @Get(':id')

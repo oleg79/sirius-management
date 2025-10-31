@@ -7,12 +7,15 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Query,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { AssignTeacherDto } from './dto/asssign-teacher.dto';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { RequestUser } from '../auth/intefaces/request-user.interface';
 
 @Controller('students')
 export class StudentsController {
@@ -24,9 +27,13 @@ export class StudentsController {
     return this.studentsService.create(createStudentDto);
   }
 
+  @Roles(['admin', 'teacher'])
   @Get()
-  findAll() {
-    return this.studentsService.findAll();
+  findAll(
+    @CurrentUser() user: RequestUser,
+    @Query('instrument') instrument?: string,
+  ) {
+    return this.studentsService.findAll(user, instrument);
   }
 
   @Get(':id')

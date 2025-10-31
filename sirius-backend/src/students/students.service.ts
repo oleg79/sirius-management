@@ -5,45 +5,71 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
 import { AssignTeacherDto } from './dto/asssign-teacher.dto';
+import type { RequestUser } from '../auth/intefaces/request-user.interface';
+import { Teacher } from '../teachers/entities/teacher.entity';
 
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student)
-    private readonly repository: Repository<Student>,
+    private readonly studentRepo: Repository<Student>,
+    @InjectRepository(Teacher)
+    private readonly teacherRepo: Repository<Teacher>,
   ) {}
 
   create(createStudentDto: CreateStudentDto) {
-    const student = this.repository.create(createStudentDto);
+    const student = this.studentRepo.create(createStudentDto);
 
-    return this.repository.save(student);
+    return this.studentRepo.save(student);
   }
 
-  findAll() {
-    return this.repository.find();
+  async findAll(user: RequestUser, instrument?: string) {
+    if (user.role === 'admin') {
+      const where = instrument ? { instrument } : {};
+
+      return this.studentRepo.findBy(where);
+    }
+
+    if (user.role === 'teacher') {
+      const result = await this.teacherRepo.findOne({
+        where: { id: user.id },
+        relations: {
+          students: true,
+        },
+      });
+
+      return result?.students ?? [];
+    }
+
+    return [];
   }
 
   findOne(id: string) {
-    return this.repository.findOneBy({ id });
+    return this.studentRepo.findOneBy({ id });
   }
 
   assignTeacher(studentId: string, assignTeacherDto: AssignTeacherDto) {
-    return this.repository
+    const builder = this.studentRepo
       .createQueryBuilder()
       .relation(Student, 'teachers')
-      .of(studentId)
-      .add(assignTeacherDto.teacherId);
+      .of(studentId);
+
+    if (assignTeacherDto.assign) {
+      return builder.add(assignTeacherDto.teacherId);
+    } else {
+      return builder.remove(assignTeacherDto.teacherId);
+    }
   }
 
   async update(id: string, updateStudentDto: UpdateStudentDto) {
-    const student = await this.repository.preload({ id, ...updateStudentDto });
+    const student = await this.studentRepo.preload({ id, ...updateStudentDto });
 
     if (!student) throw new NotFoundException(`Student ${id} not found`);
 
-    return this.repository.save(student);
+    return this.studentRepo.save(student);
   }
 
   remove(id: string) {
-    return this.repository.delete(id);
+    return this.studentRepo.delete(id);
   }
 }

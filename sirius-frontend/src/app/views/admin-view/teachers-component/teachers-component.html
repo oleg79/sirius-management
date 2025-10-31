@@ -12,6 +12,7 @@
         </div>
         <div class="flex gap-2 shrink-0">
           <button
+            (click)="selectedTeacher.set(teacher)"
             class="text-sm/6 p-1.5 bg-indigo-400 text-white rounded-md cursor-pointer"
           >
             manage students
@@ -112,5 +113,12 @@
     </div>
   </div>
 </div>
+
+@if (selectedTeacher()) {
+  <app-students-manager
+    [teacher]="selectedTeacher()!"
+    (close)="selectedTeacher.set(null)"
+  />
+}
 
 

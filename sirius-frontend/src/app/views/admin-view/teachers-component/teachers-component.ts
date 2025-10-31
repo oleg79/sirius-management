@@ -3,6 +3,7 @@ import {httpResource} from '@angular/common/http';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Teacher, TeacherService} from '../../../services/teacher.service';
 import {InstrumentEmojiPipe} from '../../../pipes/instrument-emoji-pipe';
+import {StudentsManager} from './students-manager/students-manager';
 
 const INSTRUMENT_OPTIONS = [
   { value: 'guitar', label: 'guitar' },
@@ -15,7 +16,8 @@ const INSTRUMENT_OPTIONS = [
   selector: 'app-teachers-component',
   imports: [
     ReactiveFormsModule,
-    InstrumentEmojiPipe
+    InstrumentEmojiPipe,
+    StudentsManager
   ],
   templateUrl: './teachers-component.html',
   styleUrl: './teachers-component.scss',
@@ -26,6 +28,8 @@ export class TeachersComponent {
   teachersResource = httpResource<Teacher[]>(() => 'teachers');
 
   teachers = linkedSignal(() => this.teachersResource.value() ?? []);
+
+  selectedTeacher = signal<Teacher | null>(null);
 
   teacherForm = new FormGroup({
     firstName: new FormControl('', [Validators.required]),

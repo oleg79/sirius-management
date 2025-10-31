@@ -22,7 +22,13 @@ export class TeachersService {
     return this.teacherRepo.save(teacher);
   }
 
-  async findAll(user: RequestUser) {
+  async findAll(user: RequestUser, instrument?: string) {
+    if (user.role === 'admin') {
+      const where = instrument ? { instrument } : {};
+
+      return this.teacherRepo.findBy(where);
+    }
+
     if (user.role === 'student') {
       const result = await this.studentRepo.findOne({
         where: { id: user.id },
@@ -31,9 +37,10 @@ export class TeachersService {
         },
       });
 
-      return result?.teachers;
+      return result?.teachers ?? [];
     }
-    return this.teacherRepo.find();
+
+    return [];
   }
 
   findOne(id: string) {
