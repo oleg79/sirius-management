@@ -1,17 +1,8 @@
 import { Routes } from '@angular/router';
 import {authGuard} from './guards/auth-guard';
-import {LoginView} from './views/login-view/login-view';
-import {TeacherView} from './views/teacher-view/teacher-view';
-import {StudentView} from './views/student-view/student-view';
 import {rootRedirectGuard} from './guards/root-redirect-guard';
 import {loginGuard} from './guards/login-guard';
-import {EmptyView} from './views/empty-view/empty-view';
-import {LessonsComponent as StudentLessonsComponent} from './views/student-view/lessons-component/lessons-component';
-import {TeachersComponent as StudentTeachersComponent} from './views/student-view/teachers-component/teachers-component';
-import {AdminView} from './views/admin-view/admin-view';
-import {LessonsComponent} from './views/admin-view/lessons-component/lessons-component';
-import {TeachersComponent} from './views/admin-view/teachers-component/teachers-component';
-import {StudentsComponent} from './views/admin-view/students-component/students-component';
+
 
 export const routes: Routes = [
   {
@@ -21,59 +12,66 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminView,
+    loadComponent: () => import('./views/admin-view/admin-view').then(c => c.AdminView),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: LessonsComponent,
+        loadComponent: () => import('./views/admin-view/lessons-component/lessons-component')
+          .then(c => c.LessonsComponent),
       },
       {
         path: 'teachers',
-        component: TeachersComponent,
+        loadComponent: () => import('./views/admin-view/teachers-component/teachers-component')
+          .then(c => c.TeachersComponent),
       },
       {
         path: 'students',
-        component: StudentsComponent,
+        loadComponent: () => import('./views/admin-view/students-component/students-component')
+          .then(c => c.StudentsComponent),
       },
     ]
   },
   {
     path: 'teacher',
-    component: TeacherView,
+    loadComponent: () => import('./views/teacher-view/teacher-view').then(c => c.TeacherView),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: EmptyView,
+        loadComponent: () => import('./views/teacher-view/lessons-component/lessons-component')
+          .then(c => c.LessonsComponent),
       },
       {
         path: 'students',
-        component: EmptyView,
+        loadComponent: () => import('./views/teacher-view/students-component/students-component')
+          .then(c => c.StudentsComponent),
       },
     ]
   },
   {
     path: 'student',
-    component: StudentView,
+    loadComponent: () => import('./views/student-view/student-view').then(c => c.StudentView),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: StudentLessonsComponent,
+        loadComponent: () => import('./views/student-view/lessons-component/lessons-component')
+          .then(c => c.LessonsComponent),
       },
       {
         path: 'teachers',
-        component: StudentTeachersComponent,
+        loadComponent: () => import('./views/student-view/teachers-component/teachers-component')
+          .then(c => c.TeachersComponent),
       },
     ]
   },
   {
     path: 'login',
-    component: LoginView,
+    loadComponent: () => import('./views/login-view/login-view').then(c => c.LoginView),
     canActivate: [loginGuard],
   },
 ];

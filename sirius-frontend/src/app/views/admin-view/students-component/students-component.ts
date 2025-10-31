@@ -12,7 +12,7 @@ const INSTRUMENT_OPTIONS = [
 ] as const;
 
 @Component({
-  selector: 'app-students-component',
+  selector: 'app-admin-students-component',
   imports: [
     InstrumentEmojiPipe,
     ReactiveFormsModule
