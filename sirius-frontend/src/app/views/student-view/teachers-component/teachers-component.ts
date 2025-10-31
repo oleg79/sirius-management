@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import {Component, computed} from '@angular/core';
 import {httpResource} from '@angular/common/http';
+import {JsonPipe} from '@angular/common';
 
 @Component({
   selector: 'app-student-teachers-component',
-  imports: [],
+  imports: [
+    JsonPipe
+  ],
   templateUrl: './teachers-component.html',
   styleUrl: './teachers-component.scss',
 })
 export class TeachersComponent {
-  teachers = httpResource(() => 'teachers');
+  teachersResource = httpResource(() => 'teachers');
+
+  teachers = computed(() => this.teachersResource.value() ?? []);
 }
