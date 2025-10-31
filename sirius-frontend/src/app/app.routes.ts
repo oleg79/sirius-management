@@ -6,6 +6,8 @@ import {StudentView} from './views/student-view/student-view';
 import {rootRedirectGuard} from './guards/root-redirect-guard';
 import {loginGuard} from './guards/login-guard';
 import {EmptyView} from './views/empty-view/empty-view';
+import {LessonsComponent} from './views/student-view/lessons-component/lessons-component';
+import {TeachersComponent} from './views/student-view/teachers-component/teachers-component';
 
 export const routes: Routes = [
   {
@@ -37,11 +39,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'lessons', pathMatch: 'full' },
       {
         path: 'lessons',
-        component: EmptyView,
+        component: LessonsComponent,
       },
       {
         path: 'teachers',
-        component: EmptyView,
+        component: TeachersComponent,
       },
     ]
   },
