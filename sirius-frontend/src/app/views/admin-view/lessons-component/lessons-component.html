@@ -1,1 +1,79 @@
-<p>lessons-component works!</p>
+<div class="flex px-4">
+  <div role="list" class="basis-1/2">
+    <pre>
+      {{ lessons() | json }}
+    </pre>
+  </div>
+
+
+  <div class="basis-1/2">
+    <div class="mt-10 mx-auto max-w-sm">
+      <div class="space-y-6">
+
+        <app-teacher-selector (selectedTeacherIdChange)="handleSelectTeacherId($event)"/>
+
+        @if (selectedTeacherId()) {
+          <app-student-selector
+            [teacherId]="selectedTeacherId()!"
+            (selectedStudentIdChange)="handleSelectStudentId($event)"
+          />
+        }
+
+        @if (selectedStudentId()) {
+          <div>
+            <label for="date" class="block text-sm/6 font-medium">Date</label>
+            <div class="mt-2">
+              <input
+                id="date"
+                type="date"
+                [(ngModel)]="selectedDate"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedDate()) {
+          <div>
+            <label for="startTime" class="block text-sm/6 font-medium">Start Time</label>
+            <div class="mt-2">
+              <input
+                id="startTime"
+                type="time"
+                [(ngModel)]="selectedStartTime"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedStartTime()) {
+          <div>
+            <label for="endTime" class="block text-sm/6 font-medium">End Time</label>
+            <div class="mt-2">
+              <input
+                id="endTime"
+                type="time"
+                [(ngModel)]="selectedEndTime"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedEndTime()) {
+          <div>
+            <button
+              (click)="handleCreateLesson()"
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Create lesson
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,7 +31,11 @@ export class LessonsService {
 
   findAllBy(userId: string, role: UserRole) {
     const where =
-      role === 'teacher' ? { teacherId: userId } : { studentId: userId };
+      role === 'teacher'
+        ? { teacherId: userId }
+        : role === 'student'
+          ? { studentId: userId }
+          : {};
 
     return this.repository.find({
       where,
