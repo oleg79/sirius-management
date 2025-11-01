@@ -42,6 +42,12 @@ export class StudentsController {
   }
 
   @Roles(['admin'])
+  @Get(':id/teachers')
+  teachers(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.studentsService.findAllTeachersOf(id);
+  }
+
+  @Roles(['admin'])
   @Patch(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,

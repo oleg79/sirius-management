@@ -47,12 +47,15 @@ export class TeachersService {
     return this.teacherRepo.findOneBy({ id });
   }
 
-  findAllStudentsOf(id: string) {
-    return this.teacherRepo
-      .createQueryBuilder()
-      .relation(Teacher, 'students')
-      .of(id)
-      .loadMany<Student>();
+  async findAllStudentsOf(id: string) {
+    const result = await this.teacherRepo.findOne({
+      where: { id },
+      relations: { students: true },
+    });
+
+    if (!result) return [];
+
+    return result.students;
   }
 
   async update(id: string, updateTeacherDto: UpdateTeacherDto) {
