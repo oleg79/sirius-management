@@ -1,10 +1,11 @@
-import {Component, computed, inject, linkedSignal, model, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, model, OnInit, signal} from '@angular/core';
 import {httpResource} from '@angular/common/http';
 import {AuthService} from '../../../services/auth.service';
 import {Lesson, LessonService} from '../../../services/lesson.service';
 import {FormsModule} from '@angular/forms';
 import {LessonCard} from '../../../components/lesson-card/lesson-card';
 import {TeacherSelector} from '../../admin-view/lessons-component/teacher-selector/teacher-selector';
+import {WebSocketService} from '../../../services/web-socket.service';
 
 @Component({
   selector: 'app-student-lessons-component',
@@ -16,9 +17,22 @@ import {TeacherSelector} from '../../admin-view/lessons-component/teacher-select
   templateUrl: './lessons-component.html',
   styleUrl: './lessons-component.scss',
 })
-export class LessonsComponent {
+export class LessonsComponent implements OnInit{
   private authService = inject(AuthService);
+  private webSocketService = inject(WebSocketService);
   private lessonService = inject(LessonService);
+
+  ngOnInit(): void {
+    this.webSocketService.on<Lesson>('lesson:accepted', this.updateLesson);
+    this.webSocketService.on<Lesson>('lesson:rejected', this.updateLesson);
+  }
+
+  private updateLesson = (lesson: Lesson) => {
+    this.lessons.update((ls) => [
+      ...ls.filter(l => l.id !== lesson.id),
+      lesson
+    ]);
+  }
 
   private lessonsResource = httpResource<Lesson[]>(() => 'lessons', { defaultValue: [] });
 

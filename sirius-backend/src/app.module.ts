@@ -7,6 +7,7 @@ import { LessonsModule } from './lessons/lessons.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AdminsModule } from './admins/admins.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AdminsModule } from './admins/admins.module';
     AuthModule,
     UsersModule,
     AdminsModule,
+    NotificationsModule,
   ],
   controllers: [],
   providers: [],
