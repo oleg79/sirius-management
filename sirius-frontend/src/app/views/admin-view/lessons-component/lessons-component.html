@@ -1,13 +1,42 @@
-<div class="flex px-4">
-  <div role="list" class="basis-1/2">
-    <pre>
-      {{ lessons() | json }}
-    </pre>
+<div class="flex p-4 gap-4">
+  <div class="flex basis-3/4 gap-2">
+    <div class="flex flex-col basis-1/4 gap-2">
+      <div class="bg-green-500 rounded-sm p-1 flex items-center justify-center font-bold text-white">
+        upcoming
+      </div>
+      @for (lesson of upcomingLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="accepted"/>
+      }
+    </div>
+    <div class="basis-1/4">
+      <div class="bg-yellow-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        pending
+      </div>
+      @for (lesson of pendingLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="pending"/>
+      }
+    </div>
+    <div class="basis-1/4">
+      <div class="bg-red-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        rejected
+      </div>
+      @for (lesson of rejectedLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="rejected"/>
+      }
+    </div>
+    <div class="basis-1/4">
+      <div class="bg-gray-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        past
+      </div>
+      @for (lesson of pastLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="past"/>
+      }
+    </div>
   </div>
 
 
-  <div class="basis-1/2">
-    <div class="mt-10 mx-auto max-w-sm">
+  <div class="basis-1/4">
+    <div class="mx-auto max-w-sm">
       <div class="space-y-6">
 
         <app-teacher-selector (selectedTeacherIdChange)="handleSelectTeacherId($event)"/>

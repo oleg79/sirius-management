@@ -1,6 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {firstValueFrom} from 'rxjs';
+import {Teacher} from './teacher.service';
+import {Student} from './student.service';
+
+export type LessonStatus = 'pending' | 'accepted' | 'rejected';
 
 export type CreateLessonDto =  {
   teacherId: string;
@@ -13,6 +17,9 @@ export type Lesson = {
   id: string;
   teacherId: string;
   studentId: string;
+  teacher?: Teacher;
+  student?: Student;
+  status: LessonStatus;
   startTime: Date;
   endTime: Date;
 }

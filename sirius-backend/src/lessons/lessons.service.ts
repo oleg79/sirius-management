@@ -9,24 +9,29 @@ import { UserRole } from '../users/entities/user.entity';
 export class LessonsService {
   constructor(
     @InjectRepository(Lesson)
-    private readonly repository: Repository<Lesson>,
+    private readonly lessonsRepo: Repository<Lesson>,
   ) {}
 
-  create(createLessonDto: CreateLessonDto, status: LessonStatus) {
-    const lesson = this.repository.create({
+  async create(createLessonDto: CreateLessonDto, status: LessonStatus) {
+    const lesson = this.lessonsRepo.create({
       ...createLessonDto,
       status,
     });
 
-    return this.repository.save(lesson);
+    const { id } = await this.lessonsRepo.save(lesson);
+
+    return this.lessonsRepo.findOne({
+      where: { id },
+      relations: { teacher: true, student: true },
+    });
   }
 
   async accept(id: string) {
-    const lesson = await this.repository.preload({ id, status: 'accepted' });
+    const lesson = await this.lessonsRepo.preload({ id, status: 'accepted' });
 
     if (!lesson) throw new NotFoundException(`Lesson ${id} not found`);
 
-    return this.repository.save(lesson);
+    return this.lessonsRepo.save(lesson);
   }
 
   findAllBy(userId: string, role: UserRole) {
@@ -37,7 +42,7 @@ export class LessonsService {
           ? { studentId: userId }
           : {};
 
-    return this.repository.find({
+    return this.lessonsRepo.find({
       where,
       relations: {
         teacher: role !== 'teacher',

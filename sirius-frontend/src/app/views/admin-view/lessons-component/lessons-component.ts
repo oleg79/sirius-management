@@ -1,10 +1,10 @@
-import {Component, inject, linkedSignal, model, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, model, signal} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TeacherSelector} from './teacher-selector/teacher-selector';
 import {StudentSelector} from './student-selector/student-selector';
 import {Lesson, LessonService} from '../../../services/lesson.service';
 import {httpResource} from '@angular/common/http';
-import {JsonPipe} from '@angular/common';
+import {LessonCard} from '../../../components/lesson-card/lesson-card';
 
 @Component({
   selector: 'app-admin-lessons-component',
@@ -13,7 +13,7 @@ import {JsonPipe} from '@angular/common';
     ReactiveFormsModule,
     TeacherSelector,
     StudentSelector,
-    JsonPipe
+    LessonCard
   ],
   templateUrl: './lessons-component.html',
   styleUrl: './lessons-component.scss',
@@ -24,6 +24,15 @@ export class LessonsComponent {
   private lessonsResource = httpResource<Lesson[]>(() => 'lessons', { defaultValue: [] });
 
   lessons = linkedSignal(() => this.lessonsResource.value());
+
+  upcomingLessons = computed(() => this.lessons().filter(
+    l => l.status === 'accepted' && new Date(l.startTime) > new Date()
+  ));
+  pendingLessons = computed(() => this.lessons().filter(l => l.status === 'pending'));
+  rejectedLessons = computed(() => this.lessons().filter(l => l.status === 'rejected'));
+  pastLessons = computed(() => this.lessons().filter(
+    l => l.status === 'accepted' && new Date(l.endTime) < new Date()
+  ));
 
   selectedTeacherId = signal<string | null>(null);
   selectedStudentId = signal<string | null>(null);
@@ -48,13 +57,13 @@ export class LessonsComponent {
   }
 
   async handleCreateLesson() {
-    await this.lessonService.create({
+    const lesson = await this.lessonService.create({
       teacherId: this.selectedTeacherId()!,
       studentId: this.selectedStudentId()!,
       startTime: new Date(`${this.selectedDate()} ${this.selectedStartTime()}`),
       endTime: new Date(`${this.selectedDate()} ${this.selectedEndTime()}`),
     });
 
-    this.lessonsResource.reload();
+    this.lessons.update(ls => [lesson, ...ls]);
   }
 }
