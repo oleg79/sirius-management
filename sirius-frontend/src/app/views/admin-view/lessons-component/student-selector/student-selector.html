@@ -6,7 +6,7 @@
       [(ngModel)]="selectedStudentId"
       class="block w-full rounded-md  px-3 py-2 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
     >
-      <option value="">Select teacher...</option>
+      <option value="">Select student...</option>
       @for (student of students(); track student.id) {
         <option [value]="student.id">
           {{ student.firstName }} {{ student.lastName }}

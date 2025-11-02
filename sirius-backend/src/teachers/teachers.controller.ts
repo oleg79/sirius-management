@@ -40,7 +40,7 @@ export class TeachersController {
     return this.teachersService.findOne(id);
   }
 
-  @Roles(['admin'])
+  @Roles(['admin', 'teacher'])
   @Get(':id/students')
   students(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.teachersService.findAllStudentsOf(id);

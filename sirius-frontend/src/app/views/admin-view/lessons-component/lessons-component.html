@@ -8,7 +8,7 @@
         <app-lesson-card [lesson]="lesson" status="accepted"/>
       }
     </div>
-    <div class="basis-1/4">
+    <div class="flex flex-col basis-1/4 gap-2">
       <div class="bg-yellow-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
         pending
       </div>
@@ -16,7 +16,7 @@
         <app-lesson-card [lesson]="lesson" status="pending"/>
       }
     </div>
-    <div class="basis-1/4">
+    <div class="flex flex-col basis-1/4 gap-2">
       <div class="bg-red-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
         rejected
       </div>
@@ -24,7 +24,7 @@
         <app-lesson-card [lesson]="lesson" status="rejected"/>
       }
     </div>
-    <div class="basis-1/4">
+    <div class="flex flex-col basis-1/4 gap-2">
       <div class="bg-gray-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
         past
       </div>

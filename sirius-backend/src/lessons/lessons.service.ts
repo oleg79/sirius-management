@@ -12,7 +12,11 @@ export class LessonsService {
     private readonly lessonsRepo: Repository<Lesson>,
   ) {}
 
-  async create(createLessonDto: CreateLessonDto, status: LessonStatus) {
+  async create(
+    createLessonDto: CreateLessonDto,
+    status: LessonStatus,
+    role: UserRole,
+  ) {
     const lesson = this.lessonsRepo.create({
       ...createLessonDto,
       status,
@@ -22,16 +26,40 @@ export class LessonsService {
 
     return this.lessonsRepo.findOne({
       where: { id },
-      relations: { teacher: true, student: true },
+      relations: { teacher: role !== 'teacher', student: role !== 'student' },
     });
   }
 
-  async accept(id: string) {
-    const lesson = await this.lessonsRepo.preload({ id, status: 'accepted' });
+  async accept(lessonId: string) {
+    const lesson = await this.lessonsRepo.preload({
+      id: lessonId,
+      status: 'accepted',
+    });
 
-    if (!lesson) throw new NotFoundException(`Lesson ${id} not found`);
+    if (!lesson) throw new NotFoundException(`Lesson ${lessonId} not found`);
 
-    return this.lessonsRepo.save(lesson);
+    const { id } = await this.lessonsRepo.save(lesson);
+
+    return this.lessonsRepo.findOne({
+      where: { id },
+      relations: { student: true },
+    });
+  }
+
+  async reject(lessonId: string) {
+    const lesson = await this.lessonsRepo.preload({
+      id: lessonId,
+      status: 'rejected',
+    });
+
+    if (!lesson) throw new NotFoundException(`Lesson ${lessonId} not found`);
+
+    const { id } = await this.lessonsRepo.save(lesson);
+
+    return this.lessonsRepo.findOne({
+      where: { id },
+      relations: { student: true },
+    });
   }
 
   findAllBy(userId: string, role: UserRole) {

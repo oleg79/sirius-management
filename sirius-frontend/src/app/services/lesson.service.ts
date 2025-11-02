@@ -37,4 +37,28 @@ export class LessonService {
   create(createLessonDto: CreateLessonDto) {
     return firstValueFrom(this.create$(createLessonDto));
   }
+
+  private request$(createLessonDto: CreateLessonDto) {
+    return this.http.post<Lesson>('lessons/request', createLessonDto)
+  }
+
+  request(createLessonDto: CreateLessonDto) {
+    return firstValueFrom(this.request$(createLessonDto));
+  }
+
+  private accept$(id: string) {
+    return this.http.patch<Lesson>(`lessons/${id}/accept`, {});
+  }
+
+  accept(id: string) {
+    return firstValueFrom(this.accept$(id));
+  }
+
+  private reject$(id: string) {
+    return this.http.patch<Lesson>(`lessons/${id}/reject`, {});
+  }
+
+  reject(id: string) {
+    return firstValueFrom(this.reject$(id));
+  }
 }

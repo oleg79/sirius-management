@@ -1,1 +1,101 @@
-<p>lessons-component works!</p>
+<div class="flex p-4 gap-4">
+  <div class="flex basis-3/4 gap-2">
+    <div class="flex flex-col basis-1/4 gap-2">
+      <div class="bg-green-500 rounded-sm p-1 flex items-center justify-center font-bold text-white">
+        upcoming
+      </div>
+      @for (lesson of upcomingLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="accepted"/>
+      }
+    </div>
+    <div class="flex flex-col basis-1/4 gap-2">
+      <div class="bg-yellow-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        pending
+      </div>
+      @for (lesson of pendingLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="pending"/>
+      }
+    </div>
+    <div class="flex flex-col basis-1/4 gap-2">
+      <div class="bg-red-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        rejected
+      </div>
+      @for (lesson of rejectedLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="rejected"/>
+      }
+    </div>
+    <div class="flex flex-col basis-1/4 gap-2">
+      <div class="bg-gray-500 rounded-sm p-1 flex items-center justify-center ont-bold text-white">
+        past
+      </div>
+      @for (lesson of pastLessons(); track lesson.id) {
+        <app-lesson-card [lesson]="lesson" status="past"/>
+      }
+    </div>
+  </div>
+
+
+  <div class="basis-1/4">
+    <div class="mx-auto max-w-sm">
+      <div class="space-y-6">
+
+        <app-teacher-selector (selectedTeacherIdChange)="handleSelectTeacherId($event)"/>
+
+        @if (selectedTeacherId()) {
+          <div>
+            <label for="date" class="block text-sm/6 font-medium">Date</label>
+            <div class="mt-2">
+              <input
+                id="date"
+                type="date"
+                [(ngModel)]="selectedDate"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedDate()) {
+          <div>
+            <label for="startTime" class="block text-sm/6 font-medium">Start Time</label>
+            <div class="mt-2">
+              <input
+                id="startTime"
+                type="time"
+                [(ngModel)]="selectedStartTime"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedStartTime()) {
+          <div>
+            <label for="endTime" class="block text-sm/6 font-medium">End Time</label>
+            <div class="mt-2">
+              <input
+                id="endTime"
+                type="time"
+                [(ngModel)]="selectedEndTime"
+                required
+                class="block w-full rounded-md  px-3 py-1.5 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+              />
+            </div>
+          </div>
+        }
+
+        @if (selectedEndTime()) {
+          <div>
+            <button
+              (click)="handleRequestLesson()"
+              class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              Request lesson
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

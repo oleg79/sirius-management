@@ -19,20 +19,32 @@ export class LessonsController {
 
   @Roles(['admin', 'teacher'])
   @Post('create')
-  create(@Body() createLessonDto: CreateLessonDto) {
-    return this.lessonsService.create(createLessonDto, 'accepted');
+  create(
+    @CurrentUser() user: RequestUser,
+    @Body() createLessonDto: CreateLessonDto,
+  ) {
+    return this.lessonsService.create(createLessonDto, 'accepted', user.role);
   }
 
   @Roles(['student'])
   @Post('request')
-  request(@Body() createLessonDto: CreateLessonDto) {
-    return this.lessonsService.create(createLessonDto, 'pending');
+  request(
+    @CurrentUser() user: RequestUser,
+    @Body() createLessonDto: CreateLessonDto,
+  ) {
+    return this.lessonsService.create(createLessonDto, 'pending', user.role);
   }
 
   @Roles(['teacher'])
-  @Patch('accept/:id')
+  @Patch(':id/accept')
   accept(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.lessonsService.accept(id);
+  }
+
+  @Roles(['teacher'])
+  @Patch(':id/reject')
+  reject(@Param('id', new ParseUUIDPipe()) id: string) {
+    return this.lessonsService.reject(id);
   }
 
   @Get()
