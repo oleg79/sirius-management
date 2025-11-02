@@ -41,12 +41,20 @@ export class NotificationsGateway implements OnGatewayConnection {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     socket.data.userId = userId;
 
-    console.log('JOINED:', userId);
-
-    await socket.join(`user:${userId}`);
+    if (payload.role === 'admin') {
+      await socket.join('admins');
+    } else {
+      await socket.join(`user:${userId}`);
+    }
   }
 
-  sendTo<T>(userId: string, eventName: string, data: T) {
-    this.server.to(`user:${userId}`).emit(eventName, data);
+  sendToOne<T>(to: string, eventName: string, data: T) {
+    this.server.to(to).emit(eventName, data);
+  }
+
+  sendToMany<T>(tos: string[], eventName: string, data: T) {
+    for (const to of tos) {
+      this.server.to(to).emit(eventName, data);
+    }
   }
 }

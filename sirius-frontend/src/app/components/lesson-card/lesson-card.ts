@@ -15,6 +15,10 @@ import {DatePipe} from '@angular/common';
 export class LessonCard {
   lesson = input.required<Lesson>();
 
+  withTeacher = input(true);
+
+  withStudent = input(true);
+
   status = input.required<LessonStatus | 'past'>();
 
   durationInMins = computed(() => {

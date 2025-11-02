@@ -10,7 +10,7 @@
         upcoming
       </div>
       @for (lesson of upcomingLessons(); track lesson.id) {
-        <app-lesson-card [lesson]="lesson" status="accepted"/>
+        <app-lesson-card [lesson]="lesson" [withTeacher]="false" status="accepted"/>
       }
     </div>
     <div
@@ -22,7 +22,13 @@
         pending
       </div>
       @for (lesson of pendingLessons(); track lesson.id) {
-        <app-lesson-card cdkDrag [cdkDragData]="lesson" [lesson]="lesson" status="pending"/>
+        <app-lesson-card
+          cdkDrag
+          [cdkDragData]="lesson"
+          [lesson]="lesson"
+          [withTeacher]="false"
+          status="pending"
+        />
       }
     </div>
     <div
@@ -35,7 +41,7 @@
         rejected
       </div>
       @for (lesson of rejectedLessons(); track lesson.id) {
-        <app-lesson-card [lesson]="lesson" status="rejected"/>
+        <app-lesson-card [lesson]="lesson" [withTeacher]="false" status="rejected"/>
       }
     </div>
     <div class="flex flex-col basis-1/4 gap-2">
@@ -43,7 +49,7 @@
         past
       </div>
       @for (lesson of pastLessons(); track lesson.id) {
-        <app-lesson-card [lesson]="lesson" status="past"/>
+        <app-lesson-card [lesson]="lesson" [withTeacher]="false" status="past"/>
       }
     </div>
   </div>

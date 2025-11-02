@@ -26,10 +26,34 @@ export class LessonsService {
 
     const { id } = await this.lessonsRepo.save(lesson);
 
-    return this.lessonsRepo.findOne({
+    const createdLesson = await this.lessonsRepo.findOne({
       where: { id },
       relations: { teacher: role !== 'teacher', student: role !== 'student' },
     });
+
+    if (!createdLesson) return;
+
+    const recipients = {};
+    if (role === 'admin') {
+      recipients['userIds'] = [
+        createdLesson.studentId,
+        createdLesson.teacherId,
+      ];
+    } else if (role === 'teacher') {
+      recipients['userIds'] = [createdLesson.studentId];
+      recipients['channels'] = ['admins'];
+    } else if (role === 'student') {
+      recipients['userIds'] = [createdLesson.teacherId];
+      recipients['channels'] = ['admins'];
+    }
+
+    this.notificationsService.sendToMany(
+      recipients,
+      'lesson:created',
+      createdLesson,
+    );
+
+    return createdLesson;
   }
 
   async accept(lessonId: string) {
@@ -49,8 +73,11 @@ export class LessonsService {
 
     if (!acceptedLesson) return null;
 
-    this.notificationsService.sendTo(
-      acceptedLesson.studentId,
+    this.notificationsService.sendToMany(
+      {
+        userIds: [acceptedLesson.studentId],
+        channels: ['admins'],
+      },
       'lesson:accepted',
       acceptedLesson,
     );
@@ -75,8 +102,11 @@ export class LessonsService {
 
     if (!rejectedLesson) return null;
 
-    this.notificationsService.sendTo(
-      rejectedLesson.studentId,
+    this.notificationsService.sendToMany(
+      {
+        userIds: [rejectedLesson.studentId],
+        channels: ['admins'],
+      },
       'lesson:rejected',
       rejectedLesson,
     );
@@ -95,8 +125,8 @@ export class LessonsService {
     return this.lessonsRepo.find({
       where,
       relations: {
-        teacher: role !== 'teacher',
-        student: role !== 'student',
+        teacher: true,
+        student: true,
       },
       order: {
         startTime: 'ASC',

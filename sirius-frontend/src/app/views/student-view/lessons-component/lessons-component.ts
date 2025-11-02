@@ -19,19 +19,20 @@ import {WebSocketService} from '../../../services/web-socket.service';
 })
 export class LessonsComponent implements OnInit{
   private authService = inject(AuthService);
-  private webSocketService = inject(WebSocketService);
   private lessonService = inject(LessonService);
+  private webSocketService = inject(WebSocketService);
 
-  ngOnInit(): void {
-    this.webSocketService.on<Lesson>('lesson:accepted', this.updateLesson);
-    this.webSocketService.on<Lesson>('lesson:rejected', this.updateLesson);
-  }
-
-  private updateLesson = (lesson: Lesson) => {
-    this.lessons.update((ls) => [
-      ...ls.filter(l => l.id !== lesson.id),
-      lesson
-    ]);
+  ngOnInit() {
+    this.webSocketService.onMany<Lesson>(
+      ['lesson:created', 'lesson:accepted', 'lesson:rejected'],
+      (lesson) => {
+        console.log('LESSON NOTIFICATION');
+        this.lessons.update((ls) => [
+          ...ls.filter(l => l.id !== lesson.id),
+          lesson
+        ]);
+      }
+    );
   }
 
   private lessonsResource = httpResource<Lesson[]>(() => 'lessons', { defaultValue: [] });

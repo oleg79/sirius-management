@@ -1,10 +1,11 @@
-import {Component, computed, inject, linkedSignal, model, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, model, OnInit, signal} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TeacherSelector} from './teacher-selector/teacher-selector';
 import {StudentSelector} from './student-selector/student-selector';
 import {Lesson, LessonService} from '../../../services/lesson.service';
 import {httpResource} from '@angular/common/http';
 import {LessonCard} from '../../../components/lesson-card/lesson-card';
+import {WebSocketService} from '../../../services/web-socket.service';
 
 @Component({
   selector: 'app-admin-lessons-component',
@@ -18,8 +19,22 @@ import {LessonCard} from '../../../components/lesson-card/lesson-card';
   templateUrl: './lessons-component.html',
   styleUrl: './lessons-component.scss',
 })
-export class LessonsComponent {
+export class LessonsComponent implements OnInit {
   private lessonService = inject(LessonService);
+  private webSocketService = inject(WebSocketService);
+
+  ngOnInit() {
+    this.webSocketService.onMany<Lesson>(
+      ['lesson:created', 'lesson:accepted', 'lesson:rejected'],
+      (lesson) => {
+        console.log('LESSON NOTIFICATION');
+        this.lessons.update((ls) => [
+          ...ls.filter(l => l.id !== lesson.id),
+          lesson
+        ]);
+      }
+    );
+  }
 
   private lessonsResource = httpResource<Lesson[]>(() => 'lessons', { defaultValue: [] });
 

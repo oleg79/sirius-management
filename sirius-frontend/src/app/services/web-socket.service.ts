@@ -19,7 +19,13 @@ export class WebSocketService {
     });
   }
 
-  on<T>(eventName: string, callback: (message: T) => void): void {
+  onOne<T>(eventName: string, callback: (message: T) => void): void {
     this.socket.on(eventName, callback);
+  }
+
+  onMany<T>(eventNames: string[], callback: (message: T) => void): void {
+    for (const eventName of eventNames) {
+      this.socket.on(eventName, callback);
+    }
   }
 }

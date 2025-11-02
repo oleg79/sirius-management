@@ -17,8 +17,8 @@ export type Lesson = {
   id: string;
   teacherId: string;
   studentId: string;
-  teacher?: Teacher;
-  student?: Student;
+  teacher: Teacher;
+  student: Student;
   status: LessonStatus;
   startTime: Date;
   endTime: Date;

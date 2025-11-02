@@ -1,4 +1,4 @@
-import {Component, computed, inject, linkedSignal, model, signal} from '@angular/core';
+import {Component, computed, inject, linkedSignal, model, OnInit, signal} from '@angular/core';
 import {Lesson, LessonService} from '../../../services/lesson.service';
 import {httpResource} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
@@ -6,6 +6,7 @@ import {LessonCard} from '../../../components/lesson-card/lesson-card';
 import {StudentSelector} from '../../admin-view/lessons-component/student-selector/student-selector';
 import {AuthService} from '../../../services/auth.service';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
+import {WebSocketService} from '../../../services/web-socket.service';
 
 @Component({
   selector: 'app-teacher-lessons-component',
@@ -19,9 +20,23 @@ import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
   templateUrl: './lessons-component.html',
   styleUrl: './lessons-component.scss',
 })
-export class LessonsComponent {
+export class LessonsComponent implements OnInit {
   private authService = inject(AuthService);
   private lessonService = inject(LessonService);
+  private webSocketService = inject(WebSocketService);
+
+  ngOnInit() {
+    this.webSocketService.onMany<Lesson>(
+      ['lesson:created', 'lesson:accepted', 'lesson:rejected'],
+      (lesson) => {
+        console.log('LESSON NOTIFICATION');
+        this.lessons.update((ls) => [
+          ...ls.filter(l => l.id !== lesson.id),
+          lesson
+        ]);
+      }
+    );
+  }
 
   private lessonsResource = httpResource<Lesson[]>(() => 'lessons', { defaultValue: [] });
 
