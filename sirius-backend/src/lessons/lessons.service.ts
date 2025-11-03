@@ -28,7 +28,7 @@ export class LessonsService {
 
     const createdLesson = await this.lessonsRepo.findOne({
       where: { id },
-      relations: { teacher: role !== 'teacher', student: role !== 'student' },
+      relations: { teacher: true, student: true },
     });
 
     if (!createdLesson) return;
