@@ -1,0 +1,20 @@
+<video #localVideo autoplay playsinline [class.small-screen]="everyoneConnected()"></video>
+<video #remoteVideo autoplay playsinline></video>
+
+<div class="flex items-center justify-center gap-4 fixed bottom-0 w-full py-4">
+  <div
+    (click)="toggleCamera()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 text-white"
+    [class.bg-indigo-500]="videoEnabled()"
+    [class.bg-red-500]="!videoEnabled()"
+  >C</div>
+  <div
+    (click)="toggleMic()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 text-white"
+    [class.bg-indigo-500]="micEnabled()"
+    [class.bg-red-500]="!micEnabled()"
+  >M</div>
+  <div
+    (click)="leaveLesson()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 bg-red-500 text-white">L</div>
+</div>

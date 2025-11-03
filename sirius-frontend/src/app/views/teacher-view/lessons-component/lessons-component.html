@@ -10,7 +10,12 @@
         upcoming
       </div>
       @for (lesson of upcomingLessons(); track lesson.id) {
-        <app-lesson-card [lesson]="lesson" [withTeacher]="false" status="accepted"/>
+        <app-lesson-card
+          [lesson]="lesson"
+          [withTeacher]="false"
+          (click)="handleOpenLesson(lesson.id)"
+          status="accepted"
+        />
       }
     </div>
     <div

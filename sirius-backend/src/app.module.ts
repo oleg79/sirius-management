@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { AdminsModule } from './admins/admins.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { VideoCallsModule } from './video-calls/video-calls.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     UsersModule,
     AdminsModule,
     NotificationsModule,
+    VideoCallsModule,
   ],
   controllers: [],
   providers: [],

@@ -96,4 +96,8 @@ export class LessonsComponent implements OnInit {
 
     this.lessons.update(ls => [lesson, ...ls]);
   }
+
+  handleOpenLesson(id: string) {
+    window.open(`/lesson/${id}`, '_blank');
+  }
 }

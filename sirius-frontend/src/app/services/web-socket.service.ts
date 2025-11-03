@@ -19,13 +19,21 @@ export class WebSocketService {
     });
   }
 
-  onOne<T>(eventName: string, callback: (message: T) => void): void {
+  onOne<T>(eventName: string, callback: (message: T) => void) {
     this.socket.on(eventName, callback);
   }
 
-  onMany<T>(eventNames: string[], callback: (message: T) => void): void {
+  onMany<T>(eventNames: string[], callback: (message: T) => void) {
     for (const eventName of eventNames) {
       this.socket.on(eventName, callback);
     }
+  }
+
+  emit<T>(eventName: string, data: T) {
+    this.socket.emit(eventName, data);
+  }
+
+  emitWithAck<T, U = any>(eventName: string, data: U): Promise<T> {
+    return this.socket.emitWithAck(eventName, data);
   }
 }
