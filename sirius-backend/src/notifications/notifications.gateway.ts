@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserRole } from '../users/entities/user.entity';
 
 @WebSocketGateway({
+  namespace: '/notifications',
   cors: {
     origin: ['http://localhost:4200'],
   },
@@ -37,9 +38,6 @@ export class NotificationsGateway implements OnGatewayConnection {
     }>(token, { secret: this.configService.getOrThrow('JWT_SECRET') });
 
     const userId = payload.sub;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    socket.data.userId = userId;
 
     if (payload.role === 'admin') {
       await socket.join('admins');

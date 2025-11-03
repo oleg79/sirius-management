@@ -5,7 +5,7 @@ import {StudentSelector} from './student-selector/student-selector';
 import {Lesson, LessonService} from '../../../services/lesson.service';
 import {httpResource} from '@angular/common/http';
 import {LessonCard} from '../../../components/lesson-card/lesson-card';
-import {WebSocketService} from '../../../services/web-socket.service';
+import {NotificationsService} from '../../../features/notifications/services/notifications.service';
 
 @Component({
   selector: 'app-admin-lessons-component',
@@ -21,10 +21,10 @@ import {WebSocketService} from '../../../services/web-socket.service';
 })
 export class LessonsComponent implements OnInit {
   private lessonService = inject(LessonService);
-  private webSocketService = inject(WebSocketService);
+  private notificationsService = inject(NotificationsService);
 
   ngOnInit() {
-    this.webSocketService.onMany<Lesson>(
+    this.notificationsService.onMany<Lesson>(
       ['lesson:created', 'lesson:accepted', 'lesson:rejected'],
       (lesson) => {
         console.log('LESSON NOTIFICATION');

@@ -1,17 +1,17 @@
 import {inject, Injectable} from '@angular/core';
 import {io, Socket} from 'socket.io-client';
-import {environment} from '../../environments/environment';
-import {AuthService} from './auth.service';
+import {AuthService} from '../../../services/auth.service';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
+export class NotificationsService {
   private authService = inject(AuthService);
   private socket: Socket;
 
   constructor() {
-    this.socket = io(environment.apiUrl, {
+    this.socket = io(`${environment.apiUrl}/notifications`, {
       auth: {
         token: this.authService.getJwtToken(),
         userId: this.authService.getUserId(),
@@ -27,13 +27,5 @@ export class WebSocketService {
     for (const eventName of eventNames) {
       this.socket.on(eventName, callback);
     }
-  }
-
-  emit<T>(eventName: string, data: T) {
-    this.socket.emit(eventName, data);
-  }
-
-  emitWithAck<T, U = any>(eventName: string, data: U): Promise<T> {
-    return this.socket.emitWithAck(eventName, data);
   }
 }

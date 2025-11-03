@@ -1,8 +1,8 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import { nanoid } from 'nanoid'
-import {WebSocketService} from '../../../../services/web-socket.service';
+import { nanoid } from 'nanoid';
 import {Lesson} from '../../../../services/lesson.service';
 import {AuthService} from '../../../../services/auth.service';
+import {NotificationsService} from '../../services/notifications.service';
 
 @Component({
   selector: 'app-notifications-manager',
@@ -12,12 +12,12 @@ import {AuthService} from '../../../../services/auth.service';
 })
 export class NotificationsManager implements OnInit {
   private authService = inject(AuthService);
-  private webSocketService = inject(WebSocketService);
+  private notificationsService = inject(NotificationsService);
 
   notifications = signal<{ id: string; title: string; text: string; }[]>([]);
 
   ngOnInit() {
-    this.webSocketService.onOne<Lesson>('lesson:created', (lesson) => {
+    this.notificationsService.onOne<Lesson>('lesson:created', (lesson) => {
       if (location.pathname.endsWith('lessons')) return;
 
       this.notifications.update((ns) => [
