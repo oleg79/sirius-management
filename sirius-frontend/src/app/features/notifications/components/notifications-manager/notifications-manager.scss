@@ -1,0 +1,27 @@
+:host {
+  @keyframes notification-enter {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes notification-leave {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .notification-enter {
+    animation: notification-enter 400ms ease-in;
+  }
+
+  .notification-leave {
+    animation: notification-leave 400ms ease-in;
+  }
+}

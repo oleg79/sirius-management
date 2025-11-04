@@ -1,0 +1,8 @@
+<div class="text-sm font-bold flex justify-center">
+  <span>{{ lesson().teacher.instrument | instrumentEmoji }} lesson starts soon!</span>
+</div>
+
+<button
+  class="cursor-pointer bg-green-700 mt-2 w-full text-white p-2 flex items-center justify-center rounded-sm"
+  (click)="handleOpenLesson()"
+>open lesson</button>

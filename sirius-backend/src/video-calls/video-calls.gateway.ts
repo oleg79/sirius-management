@@ -39,10 +39,13 @@ export class VideoCallsGateway
       return;
     }
 
-    await this.jwtService.verifyAsync(
-      token,
-      this.configService.getOrThrow('JWT_SECRET'),
-    );
+    try {
+      await this.jwtService.verifyAsync(token, {
+        secret: this.configService.getOrThrow('JWT_SECRET'),
+      });
+    } catch {
+      //
+    }
 
     await socket.join(`lesson:${lessonId}`);
 

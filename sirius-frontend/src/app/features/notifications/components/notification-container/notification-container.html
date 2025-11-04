@@ -1,0 +1,10 @@
+<ng-content/>
+<button
+  class="cursor-pointer rounded-full absolute -top-2 -right-2 flex items-center justify-center w-7 h-7 shadow-md"
+  [class.bg-green-50]="type() === 'success'"
+  [class.bg-yellow-50]="type() === 'warning'"
+  [class.bg-red-50]="type() === 'danger'"
+  (click)="close.emit()"
+>
+  <span>x</span>
+</button>
