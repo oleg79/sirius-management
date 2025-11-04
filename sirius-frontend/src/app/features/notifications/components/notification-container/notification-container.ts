@@ -14,6 +14,7 @@ import {AfterViewInit, Component, input, output} from '@angular/core';
 })
 export class NotificationContainer implements AfterViewInit {
   withSoundEffect = input(true);
+  withCloseBtn = input(true);
   type = input.required<'success' | 'warning' | 'danger'>()
 
   close = output();

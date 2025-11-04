@@ -5,6 +5,7 @@
         animate.enter="notification-enter"
         animate.leave="notification-leave"
         [type]="notification.type"
+        [withSoundEffect]="notification.withSound"
         (close)="handleCloseNotification(notification.id)"
       >
         @switch (notification.kind) {

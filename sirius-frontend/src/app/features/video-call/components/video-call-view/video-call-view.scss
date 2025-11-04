@@ -1,3 +1,5 @@
+
+
 :host {
   display: grid;
   grid-template-columns: 1fr;
@@ -21,4 +23,18 @@
     border: 2px solid var(--color-indigo-500);
     z-index: 10;
   }
+
+  @keyframes notification-enter {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .notification-enter {
+    animation: notification-enter 400ms ease-in;
+  }
+
 }

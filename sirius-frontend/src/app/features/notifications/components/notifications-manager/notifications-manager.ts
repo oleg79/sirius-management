@@ -12,7 +12,8 @@ export type Notification = {
   type: 'success' | 'warning' | 'danger';
   kind: 'lesson:created' | 'reminder:lesson-starts';
   data: any;
-  role: 'teacher' | 'student' | 'admin'
+  role: 'teacher' | 'student' | 'admin';
+  withSound: boolean;
 }
 
 @Component({
@@ -42,6 +43,7 @@ export class NotificationsManager implements OnInit {
           role: this.authService.getUserRole()!,
           kind: 'lesson:created',
           data: lesson,
+          withSound: false,
         }
       ])
     });
@@ -56,6 +58,7 @@ export class NotificationsManager implements OnInit {
           role: this.authService.getUserRole()!,
           kind: 'reminder:lesson-starts',
           data: lesson,
+          withSound: true,
         }
       ])
     });

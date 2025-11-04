@@ -2,23 +2,30 @@ import {Component, ElementRef, inject, OnInit, signal, viewChild} from '@angular
 import {VideoCallsService} from '../../services/video-calls.service';
 import {ActivatedRoute} from '@angular/router';
 import {map} from 'rxjs/operators';
+import {NotificationsService} from '../../../notifications/services/notifications.service';
+import {Lesson} from '../../../../services/lesson.service';
+import {NotificationContainer} from '../../../notifications/components/notification-container/notification-container';
 
 
 
 @Component({
   selector: 'app-video-call-view',
-  imports: [],
+  imports: [
+    NotificationContainer
+  ],
   templateUrl: './video-call-view.html',
   styleUrl: './video-call-view.scss',
 })
 export class VideoCallView implements OnInit {
   private videoCallsService = inject(VideoCallsService);
+  private notificationsService = inject(NotificationsService);
   private activatedRoute = inject(ActivatedRoute);
 
   private localStream!: MediaStream;
 
   videoEnabled = signal(true);
   micEnabled = signal(true);
+  showLessonEndsReminder = signal(false);
   everyoneConnected = this.videoCallsService.everyoneConnected;
 
   localVideoEl = viewChild.required<ElementRef<HTMLVideoElement>>('localVideo');
@@ -27,6 +34,10 @@ export class VideoCallView implements OnInit {
   async ngOnInit() {
     this.activatedRoute.paramMap.pipe(map(pm => pm.get('id'))).subscribe(async (lessonId) => {
       if (lessonId) {
+        this.notificationsService.onOne<Lesson>('reminder:lesson-ends', (lesson) => {
+          this.showLessonEndsReminder.set(lessonId === lesson.id);
+        });
+
         this.localStream = await navigator.mediaDevices.getUserMedia({
           video: {
             width: { min:640, ideal:1920, max:1920 },
