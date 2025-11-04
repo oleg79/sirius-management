@@ -20,3 +20,19 @@
          -d '{"firstName":"<VALUE>","lastName":"<VALUE>", "password": "<VALUE>"}'
     ```
 6. Open http://localhost:4200/ in your browser. Now you can log in as admin and start creating teachers. students, and assign students to teachers.
+
+
+### TODOS
+#### frontend
+- [ ] add person card component for displaying teacher/student
+- [ ] handle errors in forms(login form)
+- [ ] add custom components or use material UI to make the over look nicer
+- [ ] add support for light/dark theme
+- [ ] make lessons view look and behave like a calendar(apple, google)
+- [ ] add guitar tuner for guitar lessons
+- [ ] add guitar chord detector for guitar lessons
+#### backend
+- [ ] integrate nest passport for JWT
+- [ ] handle refresh of JWT
+#### both
+- [ ] record home tasks and attache them to lessons
