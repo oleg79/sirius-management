@@ -1,0 +1,35 @@
+<div class="fixed top-0 left-0 w-full flex justify-center z-20">
+  <div class="w-1/3 p-4">
+    @if (showLessonEndsReminder()) {
+      <app-notification-container
+        animate.enter="notification-enter"
+        [withCloseBtn]="false"
+        [type]="'warning'"
+      >
+        <span class="font-bold text-center">lesson ends in 10 minutes!</span>
+      </app-notification-container>
+    }
+  </div>
+</div>
+
+
+<video #localVideo autoplay playsinline [class.small-screen]="everyoneConnected()"></video>
+<video #remoteVideo autoplay playsinline></video>
+
+<div class="flex items-center justify-center gap-4 fixed bottom-0 w-full py-4">
+  <div
+    (click)="toggleCamera()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 text-white"
+    [class.bg-indigo-500]="videoEnabled()"
+    [class.bg-red-500]="!videoEnabled()"
+  >C</div>
+  <div
+    (click)="toggleMic()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 text-white"
+    [class.bg-indigo-500]="micEnabled()"
+    [class.bg-red-500]="!micEnabled()"
+  >M</div>
+  <div
+    (click)="leaveLesson()"
+    class="cursor-pointer flex items-center justify-center rounded-full size-18 bg-red-500 text-white">L</div>
+</div>

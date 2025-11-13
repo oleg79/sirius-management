@@ -74,4 +74,9 @@ export const routes: Routes = [
     loadComponent: () => import('./views/login-view/login-view').then(c => c.LoginView),
     canActivate: [loginGuard],
   },
+  {
+    path: 'lesson/:id',
+    loadComponent: () => import('./features/video-call/components/video-call-view/video-call-view')
+      .then(c => c.VideoCallView),
+  },
 ];

@@ -11,8 +11,8 @@ export class AuthService {
   private router = inject(Router);
 
   static readonly TOKEN_STORAGE_KEY = 'jwt-token';
-  // We use sessionStorage so we can login under different accounts in separate tabs.
-  private static readonly STORAGE = sessionStorage;
+
+  private static readonly STORAGE = localStorage;
 
   getJwtToken() {
     return AuthService.STORAGE.getItem(AuthService.TOKEN_STORAGE_KEY);
@@ -37,6 +37,10 @@ export class AuthService {
 
   getUserRole() {
     return this.getUser()?.role;
+  }
+
+  getUserId() {
+    return this.getUser()?.sub;
   }
 
   getUserFullName() {

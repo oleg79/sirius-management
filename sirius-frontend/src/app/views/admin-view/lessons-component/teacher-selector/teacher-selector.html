@@ -1,0 +1,17 @@
+<div>
+  <label for="teacher" class="block text-sm/6 font-medium">Teacher</label>
+  <div class="mt-2">
+    <select
+      id="teacher"
+      [(ngModel)]="selectedTeacherId"
+      class="block w-full rounded-md  px-3 py-2 text-base outline-1 -outline-offset-1 outline-indigo-200 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+    >
+      <option value="">Select teacher...</option>
+      @for (teacher of teachers(); track teacher.id) {
+        <option [value]="teacher.id">
+          {{ teacher.firstName }} {{ teacher.lastName }}
+        </option>
+      }
+    </select>
+  </div>
+</div>

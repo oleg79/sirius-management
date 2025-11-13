@@ -1,0 +1,33 @@
+@if (notifications().length > 0) {
+  <div class="flex flex-col fixed top-0 right-0 w-1/4 p-4 gap-2 h-screen">
+    @for (notification of notifications(); track notification.id) {
+      <app-notification-container
+        animate.enter="notification-enter"
+        animate.leave="notification-leave"
+        [type]="notification.type"
+        [withSoundEffect]="notification.withSound"
+        (close)="handleCloseNotification(notification.id)"
+      >
+        @switch (notification.kind) {
+          @case ('lesson:created') {
+            <app-lesson-created-notification
+              [role]="notification.role"
+              [lesson]="notification.data"
+            />
+          }
+          @case ('reminder:lesson-starts') {
+            <app-lesson-starts-notification
+              [role]="notification.role"
+              [lesson]="notification.data"
+              (openLesson)="handleCloseNotification(notification.id)"
+            />
+          }
+          @default {
+
+          }
+        }
+      </app-notification-container>
+    }
+  </div>
+}
+

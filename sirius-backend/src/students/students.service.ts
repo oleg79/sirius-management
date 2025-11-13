@@ -48,6 +48,17 @@ export class StudentsService {
     return this.studentRepo.findOneBy({ id });
   }
 
+  async findAllTeachersOf(id: string) {
+    const result = await this.studentRepo.findOne({
+      where: { id },
+      relations: { teachers: true },
+    });
+
+    if (!result) return [];
+
+    return result.teachers;
+  }
+
   assignTeacher(studentId: string, assignTeacherDto: AssignTeacherDto) {
     const builder = this.studentRepo
       .createQueryBuilder()
